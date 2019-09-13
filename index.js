@@ -1,13 +1,29 @@
-const cheerio = require('cheerio');
 const axios = require('axios');
-const 
+const fs = require("fs");
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 
+const url = 'https://www.reddit.com/r/news/';
 
-const url = 'https://www.premierleague.com/stats/top/players/goals?se=-1&cl=-1&iso=-1&po=-1?se=-1';
+//https://pusher.com/tutorials/web-scraper-node
 
-axios(url)
-      .then(response => {
-        const html = response.data;
-        console.log(html);
-      })
-      .catch(console.error);
+puppeteer
+    .launch()
+    .then(browser => browser.newPage())
+    .then(page => {
+        return page.goto(url).then(function() {
+            return page.content();
+        });
+    })
+    .then(html => {
+        const $ = cheerio.load(html);
+        const newsHeadlines = [];
+        $('a[href*="/r/news/comments"] > h2').each(function() {
+            newsHeadlines.push({
+                title: $(this).text(),
+            });
+        });
+
+        console.log(newsHeadlines);
+    })
+    .catch(console.error);
