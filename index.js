@@ -15,7 +15,10 @@ app.get("/", async (req, res) => {
 app.post("/api/html/", async (req, res) => {
   //https://pusher.com/tutorials/web-scraper-node\
   let html = await puppeteer
-    .launch()
+    .launch({
+      headless: false,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    })
     .then(browser => browser.newPage())
     .then(async page => {
       await page.goto(req.body.url);
