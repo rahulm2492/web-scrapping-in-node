@@ -1,31 +1,32 @@
-const axios = require("axios");
+const express = require("express");
 const fs = require("fs");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
+const bodyParser = require("body-parser");
 
-const url = "https://www.reddit.com/r/news/";
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-//https://pusher.com/tutorials/web-scraper-node
+app.post("/api/html/", async (req,res)=>{
 
-puppeteer
-  .launch()
-  .then(browser => browser.newPage())
-  .then(async page => {
-    await page.goto(url);
-    return page.content();
-  })
-  .then(html => {
-    const $ = cheerio.load(html);
-    // const newsHeadlines = [];
-    // $('a[href*="/r/news/comments"] > h2').each(function() {
-    //   newsHeadlines.push({
-    //     title: $(this).text()
-    //   });
-    // });
-
-    // console.log(newsHeadlines);
-
-    fs.writeFile("reddit.text", $.text(), err => {
-      console.log(err);
+//https://pusher.com/tutorials/web-scraper-node\
+let html = await puppeteer
+    .launch()
+    .then(browser => browser.newPage())
+    .then(async page => {
+        await page.goto(req.body.url);
+        return page.content();
     });
-  });
+    res.json({"result":cheerio.load(html).html()});
+});
+
+// app.use('/api', router);
+
+
+
+
+//ENV VARIABLE PORT
+const port = process.env.PORT || 3000;
+app.listen(port, ()=>console.log("Listening at port " + port + " ..."));
+
