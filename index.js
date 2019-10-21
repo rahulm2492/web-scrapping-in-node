@@ -8,25 +8,24 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post("/api/html/", async (req,res)=>{
+app.get("/", async (req, res) => {
+  res.send("Server is Up...");
+});
 
-//https://pusher.com/tutorials/web-scraper-node\
-let html = await puppeteer
+app.post("/api/html/", async (req, res) => {
+  //https://pusher.com/tutorials/web-scraper-node\
+  let html = await puppeteer
     .launch()
     .then(browser => browser.newPage())
     .then(async page => {
-        await page.goto(req.body.url);
-        return page.content();
+      await page.goto(req.body.url);
+      return page.content();
     });
-    res.json({"result":cheerio.load(html).html()});
+  res.json({ result: cheerio.load(html).html() });
 });
 
 // app.use('/api', router);
 
-
-
-
 //ENV VARIABLE PORT
 const port = process.env.PORT || 3000;
-app.listen(port, ()=>console.log("Listening at port " + port + " ..."));
-
+app.listen(port, () => console.log("Listening at port " + port + " ..."));
