@@ -16,7 +16,9 @@ app.post("/api/html/", async (req, res) => {
   //https://pusher.com/tutorials/web-scraper-node\
   let html = await puppeteer
     .launch({
-      headless: false,
+      headless: true,
+      executablePath:
+        "/home/sagar/workplace/scraping-demo/node_modules/puppeteer/.local-chromium/linux-599821/chrome-linux/chrome",
       args: ["--no-sandbox", "--disable-setuid-sandbox"]
     })
     .then(browser => browser.newPage())
