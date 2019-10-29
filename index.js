@@ -16,7 +16,8 @@ app.post("/api/html/", async (req, res) => {
   //https://pusher.com/tutorials/web-scraper-node\
   let html = await puppeteer
     .launch({
-      ignoreDefaultArgs: ["--disable-extensions"]
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
     })
     .then(browser => browser.newPage())
     .then(async page => {
