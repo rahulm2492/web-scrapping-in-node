@@ -17,7 +17,7 @@ app.post("/api/html/", async (req, res) => {
   let html = await puppeteer
     .launch({
         headless: true,
-        executablePath: 'node_modules/puppeteer/.local-chromium/linux-686378/chrome-linux/chrome'
+        executablePath: 'node_modules/puppeteer/.local-chromium/linux-686378/chrome-linux/chrome.exe'
     })
     .then(browser => browser.newPage())
     .then(async page => {
