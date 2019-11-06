@@ -16,7 +16,8 @@ app.post("/api/html/", async (req, res) => {
   //https://pusher.com/tutorials/web-scraper-node\
   let html = await puppeteer
     .launch({
-      ignoreDefaultArgs: ["--disable-extensions"]
+        headless: true,
+        executablePath: 'node_modules/puppeteer/.local-chromium/linux-686378/chrome-linux/chrome'
     })
     .then(browser => browser.newPage())
     .then(async page => {
